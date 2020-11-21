@@ -1,13 +1,15 @@
 {
-  "name": "tester-sql-csv-insert-processor",
+  "name": "sql-csv-insert-processor",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.ts",
   "scripts": {
     "start:js": "node build/index.js",
     "start": "ts-node --files src/index.ts",
-    "ts:dev": "nodemon src/index.ts --exec ts-node --project ./tsconfig.json",
+    "ts:dev": "nodemon --exec ts-node -- ./server.ts",
+    "ts:dev2": "nodemon src/index.ts --exec ts-node --project ./tsconfig.json",
     "build": "tsc"
+    
   },
   "keywords": [
     "CSV",
@@ -20,8 +22,11 @@
     "nodejs"
   ],
   "dependencies": {
-    "sql-csv-insert-processor": "file:sql-csv-insert-processor",
-    "ts-node": "^9.0.0"
+    "csv": "0.3.7",
+    "csv-parser": "^2.3.3",
+    "iconv-lite": "^0.6.2",
+    "ts-node": "^9.0.0",
+    "write": "^2.0.0"
   },
   "author": "Roberto Batty | Rober19",
   "license": "MIT",

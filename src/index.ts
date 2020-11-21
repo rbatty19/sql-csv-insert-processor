@@ -3,7 +3,7 @@
  * * IMPORTS
  *
  */
-import { Proccessor } from './app';
+import { Proccessor } from 'sql-csv-insert-processor';
 
 /**
  *
@@ -14,37 +14,44 @@ import { Proccessor } from './app';
 //
 const SETUP: ProcessorSetup[] = [
   {
-    result_file_name: 'results/ampps/ampps_result_main',
-    laggards_file_name: 'results/ampps/ampps_result_for_review',
+    result_file_name: 'exported/annotations/ann_box',
+    laggards_file_name: 'exported/annotations/for_review_ann_box',
     fields: {
-      AMPP_Id: 'ampp_id',
-      AMPP_DSC: 'ampp_dsc',
-      AMP_Id: 'amp_id',
-      VMPP_Id: 'vmpp_id',
-      AMPP_Estado: 'ampp_estado',
-      AMPP_EstValidacion: 'ampp_estvalidacion',
-      COMERCIALIZADO: 'comercializado',
+      attachment_url: 'image_url_address',
+      instructions: 'details', 
+      with_labels: 'with_labels'    
     },
     IS_INSERT_IGNORE: true,
-    TABLE_NAME: 'ampps',
+    TABLE_NAME: 'ann_box',
     csv_file_path:
-      'E:/Software Development/ProyectosWEB/OverSea/2020/AMPP vinculados y no vinculados a productos FT 11_2020.csv',
+      './src/assets/Trainingset.ai - box annotation example - demo.csv',
     encoding: 'win1250',
+    ON_DUPLICATED: '',
+    PreProcessor: [
+      (data, saveResult, saveLaggards) => {
+
+        console.log(data)
+
+        saveResult();
+
+        return data;
+      }
+    ]
   },
-  {
-    result_file_name: 'results/prods_ampps/main_t_prod_ampps_result',
-    laggards_file_name: 'results/prods_ampps/for_review_t_prod_ampps_result',
-    fields: {
-      AMPP_Id: 'ampp_id',
-      ID_PRODUCTO: 't_producto_id',
-    },
-    IS_INSERT_IGNORE: false,
-    TABLE_NAME: 't_producto_ampp',
-    csv_file_path:
-      'E:/Software Development/ProyectosWEB/OverSea/2020/AMPP vinculados y no vinculados a productos FT 11_2020.csv',
-    encoding: 'win1250',
-    ON_DUPLICATED: 'ON DUPLICATE KEY UPDATE ampp_id=VALUES(ampp_id);'
-  },
+  // {
+  //   result_file_name: 'results/prods_ampps/main_t_prod_ampps_result',
+  //   laggards_file_name: 'results/prods_ampps/for_review_t_prod_ampps_result',
+  //   fields: {
+  //     AMPP_Id: 'ampp_id',
+  //     ID_PRODUCTO: 't_producto_id',
+  //   },
+  //   IS_INSERT_IGNORE: false,
+  //   TABLE_NAME: 't_producto_ampp',
+  //   csv_file_path:
+  //   './src/assets/Trainingset.ai - box annotation example - demo.csv',
+  //   encoding: 'win1250',
+  //   ON_DUPLICATED: ''
+  // },
 ];
 
 /**

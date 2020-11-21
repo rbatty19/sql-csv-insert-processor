@@ -1,4 +1,6 @@
 
+
+type PreProcessorFunc = (data: any, save1 : () => void, save2: () => void) => object|string|number|boolean;
 /**
  * 
  */
@@ -17,5 +19,8 @@ interface ProcessorSetup {
   // >< ---------      SQL     ------------------
   TABLE_NAME: string,
   IS_INSERT_IGNORE: boolean,
-  ON_DUPLICATED?: string
+  ON_DUPLICATED: string,
+  PreProcessor: PreProcessorFunc[],
 }
+
+

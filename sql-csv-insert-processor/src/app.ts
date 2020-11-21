@@ -8,6 +8,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 import iconv from 'iconv-lite';
 import write from 'write';
+import { isNumber } from './util';
 
 /**
  *
@@ -29,7 +30,8 @@ function Proccessor(
     encoding,
     fields,
     result_file_name,
-    TABLE_NAME }: ProcessorSetup
+    TABLE_NAME,
+    PreProcessor }: ProcessorSetup
 ): void {
   let string_file = '';
   let string_file_2 = '';
@@ -67,29 +69,57 @@ function Proccessor(
         return item;
       });
 
+      // for first row and item
       if (!columns_header) {
+        //
         columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
           ',',
-        )} )`;
+        )} )`//
         PushToLaggardsHeader('-');
+        //
         PushToResultHeader(columns_header);
+        //
+        let data_sharing = row;
+        //
+        for (const func of PreProcessor) {
+          data_sharing = func(
+            data_sharing,
+            (() => PushToResult(`( ${row_data.join(',')} )`)),
+            (() => PushToLaggards(`( ${row_data.join(',')} )`))
+          )
+        }
+
       } else {
-        if (TABLE_NAME == '') {
-          if (!isNumber(row.ampp_id)) {
-            //
-            PushToLaggards(`,( ${row_data.join(',')} )`);
-          } else {
-            PushToResult(`,( ${row_data.join(',')} )`);
-          }
+        // if (TABLE_NAME == '') {
+        //   if (!isNumber(row.ampp_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
+
+        let data_sharing = row;
+
+        for (const func of PreProcessor) {
+          data_sharing = func(
+            data_sharing,
+            (() => PushToResult(`,( ${row_data.join(',')} )`)),
+            (() => PushToLaggards(`,( ${row_data.join(',')} )`))
+          )
         }
-        if (TABLE_NAME == 't_producto_ampp') {
-          if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
-            //
-            PushToLaggards(`,( ${row_data.join(',')} )`);
-          } else {
-            PushToResult(`,( ${row_data.join(',')} )`);
-          }
-        }
+
+        // if (TABLE_NAME == 't_producto_ampp') {
+        //   if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
+
+
+
       }
 
       /////////////////////////////////////
@@ -131,14 +161,7 @@ function Proccessor(
     return string.split(search).join(replace);
   }
 
-  function isNumber(value) {
-    try {
-      value = Number(value);
-      return typeof value === 'number' && isFinite(value);
-    } catch (error) {
-      return false;
-    }
-  }
+
 };
 
 export {

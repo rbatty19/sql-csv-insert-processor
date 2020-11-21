@@ -1,0 +1,5 @@
+instructions,attachment_url,with_labels,objects_to_annotate,project,callback_url,min_height,min_width
+Draw a box around each car,https://i.imgur.com/OUyDzS2.jpg,TRUE,"[{""label"":""car""}]",,,1,1
+Draw a box around each device 2,https://i.imgur.com/ZhgjlpU.jpg,TRUE,"[{""label"":""laptop""},{""label"":""tablet""},{""label"":""phone""}]",,https://my-url.url,10,10
+Draw a box around each device 3,https://i.imgur.com/ZhgjlpU.jpg,TRUE,"[{""label"":""laptop""},{""label"":""tablet""},{""label"":""phone""}]",,https://my-url.url,10,10
+Draw a box around each device 4,https://i.imgur.com/ZhgjlpU.jpg,TRUE,"[{""label"":""laptop""},{""label"":""tablet""},{""label"":""phone""}]",,https://my-url.url,10,10
