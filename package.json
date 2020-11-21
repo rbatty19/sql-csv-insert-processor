@@ -1,0 +1,27 @@
+{
+  "name": "sql-csv-insert-processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "CSV",
+    "to",
+    "SQL",
+    "Stream",
+    "Transform",
+    "node",
+    "js",
+    "nodejs"
+  ],
+  "dependencies": {
+    "csv": "0.3.7",
+    "csv-parser": "^2.3.3",
+    "iconv-lite": "^0.6.2",
+    "write": "^2.0.0"
+  },
+  "author": "Roberto Batty | Rober19",
+  "license": "MIT"
+}
