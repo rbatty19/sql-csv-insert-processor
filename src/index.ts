@@ -12,7 +12,7 @@ import { Proccessor } from './app';
  */
 
 //
-const SETUP = [
+const SETUP: ProcessorSetup[] = [
   {
     result_file_name: 'results/ampps/ampps_result_main',
     laggards_file_name: 'results/ampps/ampps_result_for_review',
@@ -55,23 +55,7 @@ const SETUP = [
 //
 
 SETUP.forEach(
-  ({
-    laggards_file_name,
-    IS_INSERT_IGNORE,
-    csv_file_path,
-    encoding,
-    fields,
-    result_file_name,
-    TABLE_NAME,
-  }) => {
-    Proccessor(
-      laggards_file_name,
-      IS_INSERT_IGNORE,
-      csv_file_path,
-      encoding,
-      fields,
-      result_file_name,
-      TABLE_NAME,
-    );
+  (setup_config) => {
+    Proccessor(setup_config);
   },
 );

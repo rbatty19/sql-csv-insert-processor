@@ -23,13 +23,13 @@ import write from 'write';
 
 
 function Proccessor(
-  laggards_file_name: string,
-  IS_INSERT_IGNORE: boolean,
-  csv_file_path: string,
-  encoding: string,
-  fields: any,
-  result_file_name: string,
-  TABLE_NAME: string,
+  { laggards_file_name,
+    IS_INSERT_IGNORE,
+    csv_file_path,
+    encoding,
+    fields,
+    result_file_name,
+    TABLE_NAME }: ProcessorSetup
 ): void {
   let string_file = '';
   let string_file_2 = '';
