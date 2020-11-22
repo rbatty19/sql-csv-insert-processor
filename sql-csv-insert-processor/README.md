@@ -1,5 +1,0 @@
-# sql-csv-insert-processor
-
-```
-
-```
