@@ -20,7 +20,7 @@
     "nodejs"
   ],
   "dependencies": {
-    "sql-csv-insert-processor": "file:sql-csv-insert-processor",
+    "sql-csv-insert-processor": "file:./libs/sql-csv-insert-processor",
     "ts-node": "^9.0.0"
   },
   "author": "Roberto Batty | Rober19",
