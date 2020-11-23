@@ -6,8 +6,6 @@
 > npm i sql-csv-insert-processor
 ```
 
-
-
 # Testing sql-csv-insert-processor
 
 ```ts
@@ -27,11 +25,32 @@ const SETUP: ProcessorSetup[] = [
     encoding: 'win1250',
     ON_DUPLICATED: '',
     PreProcessor: [
-      (data, saveResult, saveLaggards) => {
+      /**
+     * @param {*} data represents current row data
+     * @param {requestCallback} PushToResult Run the function which save the row data into first result file
+     * @param {requestCallback} PushToLaggards Run the function which save the row data into first result file
+     */
+      (data, callbackSaveResult, callbackSaveLaggards) => {
+        // if (TABLE_NAME == '') {
+        //   if (!isNumber(row.ampp_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
+        // if (TABLE_NAME == 't_producto_ampp') {
+        //   if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
 
-        console.log(data)
+        console.log(data);
 
-        saveResult();
+        callbackSaveResult();
 
         return data;
       }

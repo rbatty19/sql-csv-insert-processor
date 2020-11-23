@@ -89,15 +89,7 @@ function Proccessor(
           )
         }
 
-      } else {
-        // if (TABLE_NAME == '') {
-        //   if (!isNumber(row.ampp_id)) {
-        //     //
-        //     PushToLaggards(`,( ${row_data.join(',')} )`);
-        //   } else {
-        //     PushToResult(`,( ${row_data.join(',')} )`);
-        //   }
-        // }
+      } else {       
 
         let data_sharing = row;
 
@@ -109,17 +101,7 @@ function Proccessor(
           )
         }
 
-        // if (TABLE_NAME == 't_producto_ampp') {
-        //   if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
-        //     //
-        //     PushToLaggards(`,( ${row_data.join(',')} )`);
-        //   } else {
-        //     PushToResult(`,( ${row_data.join(',')} )`);
-        //   }
-        // }
-
-
-
+       
       }
 
       /////////////////////////////////////

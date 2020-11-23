@@ -28,11 +28,27 @@ const SETUP: ProcessorSetup[] = [
     encoding: 'win1250',
     ON_DUPLICATED: '',
     PreProcessor: [
-      (data, saveResult, saveLaggards) => {
+      (data, callbackSaveResult, callbackSaveLaggards) => {
+        // if (TABLE_NAME == '') {
+        //   if (!isNumber(row.ampp_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
+        // if (TABLE_NAME == 't_producto_ampp') {
+        //   if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
+        //     //
+        //     PushToLaggards(`,( ${row_data.join(',')} )`);
+        //   } else {
+        //     PushToResult(`,( ${row_data.join(',')} )`);
+        //   }
+        // }
 
-        console.log(data)
+        console.log(data);
 
-        saveResult();
+        callbackSaveResult();
 
         return data;
       }

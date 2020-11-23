@@ -1,6 +1,6 @@
 
 
-type PreProcessorFunc = (data: any, save1 : () => void, save2: () => void) => object|string|number|boolean;
+
 /**
  * 
  */
@@ -20,7 +20,13 @@ interface ProcessorSetup {
   TABLE_NAME: string,
   IS_INSERT_IGNORE: boolean,
   ON_DUPLICATED: string,
-  PreProcessor: PreProcessorFunc[],
+
+  /**
+ * @param data represents current row data
+ * @param {requestCallback} PushToResult Run the function which save the row data into first result file
+ * @param PushToLaggards Run the function which save the row data into first result file
+ */
+  PreProcessor: Array<(data: any, PushToResult: () => void, PushToLaggards: () => void) => object | string | number | boolean>,
 }
 
 
