@@ -41,9 +41,9 @@ function Proccessor(
   ///
   let columns_header, rows_list, columns = [], row_data;
   //
-  const current_array_data_result = [];
+  let current_array_data_result = [];
   //
-  const current_array_data_laggard = [];
+  let current_array_data_laggard = [];
 
   fs.createReadStream(csv_file_path)
     .pipe(iconv.decodeStream(encoding))
@@ -66,7 +66,7 @@ function Proccessor(
 
         return obj;
       })();
-    
+
       let data_sharing = row;
       //
       for (const func of PreProcessor) {
@@ -83,15 +83,24 @@ function Proccessor(
 
     })
     .on('end', () => {
+      let recycle = {}
       let final_data_sharing = current_array_data_result;
-      for (const func of PostProcessor) {        
+      let final_data_sharing_laggards = current_array_data_laggard;
+      for (const func of PostProcessor) {
         //
-        final_data_sharing = func(
-          final_data_sharing
+        const [ress, laggs] = func(
+          final_data_sharing,
+          final_data_sharing_laggards
         )
-        //
+        final_data_sharing = ress;
+        final_data_sharing_laggards = laggs        
       }
-
+      //
+      current_array_data_result = final_data_sharing
+      //
+      current_array_data_laggard = final_data_sharing_laggards
+      //
+      //
       console.log(` ${TABLE_NAME} | CSV file successfully processed`);
 
       current_array_data_result.forEach((item, i) => {
