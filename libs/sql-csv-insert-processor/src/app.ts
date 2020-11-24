@@ -31,7 +31,9 @@ function Proccessor(
     fields,
     result_file_name,
     TABLE_NAME,
-    PreProcessor }: ProcessorSetup
+    PreProcessor,
+    PostProcessor
+  }: ProcessorSetup
 ): void {
   let string_file = '';
   let string_file_2 = '';
@@ -64,30 +66,16 @@ function Proccessor(
 
         return obj;
       })();
-
-
-      // for first row and item
-
-      //
-      // columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
-      //   ',',
-      // )} )`
-      // //
-      // PushToLaggardsHeader('-');
-      //
-      // PushToResultHeader(columns_header);
-      //
+    
       let data_sharing = row;
       //
-
-
       for (const func of PreProcessor) {
         //
         data_sharing = func(
           data_sharing,
           PushToResult,
           PushToLaggards,
-          []
+          current_array_data_result
         )
         //
         columns = Object.keys(data_sharing)
@@ -95,6 +83,16 @@ function Proccessor(
 
     })
     .on('end', () => {
+
+      for (const func of PostProcessor) {
+        let data_sharing = current_array_data_result;       
+        //
+        data_sharing = func(
+          data_sharing
+        )
+        //
+        columns = Object.keys(data_sharing)
+      }
 
       console.log(` ${TABLE_NAME} | CSV file successfully processed`);
 
