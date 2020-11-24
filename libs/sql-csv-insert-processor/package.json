@@ -1,8 +1,8 @@
 {
   "name": "sql-csv-insert-processor",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/app.js",
   "types": "src/types/index.d.ts",
   "scripts": {
     "start:js": "node build/index.js",
