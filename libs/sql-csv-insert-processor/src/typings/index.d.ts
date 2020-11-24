@@ -29,4 +29,9 @@ interface ProcessorSetup {
   PreProcessor: Array<(data: any, PushToResult: () => void, PushToLaggards: () => void) => object | string | number | boolean>,
 }
 
+declare module 'sql-csv-insert-processor' {
+  export function Proccessor(
+    data: ProcessorSetup
+  ): void;
+}
 
