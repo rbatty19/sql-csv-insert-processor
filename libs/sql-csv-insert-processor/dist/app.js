@@ -65,13 +65,22 @@ function Proccessor(_a) {
         }
     })
         .on('end', function () {
+        var recycle = {};
         var final_data_sharing = current_array_data_result;
+        var final_data_sharing_laggards = current_array_data_laggard;
         for (var _i = 0, PostProcessor_1 = PostProcessor; _i < PostProcessor_1.length; _i++) {
             var func = PostProcessor_1[_i];
             //
-            final_data_sharing = func(final_data_sharing);
-            //
+            var _a = func(final_data_sharing, final_data_sharing_laggards), ress = _a[0], laggs = _a[1];
+            final_data_sharing = ress;
+            final_data_sharing_laggards = laggs;
         }
+        //
+        current_array_data_result = final_data_sharing;
+        //
+        current_array_data_laggard = final_data_sharing_laggards;
+        //
+        //
         console.log(" " + TABLE_NAME + " | CSV file successfully processed");
         current_array_data_result.forEach(function (item, i) {
             //
