@@ -26,7 +26,7 @@ interface ProcessorSetup {
  * @param {requestCallback} PushToResult Run the function which save the row data into first result file
  * @param PushToLaggards Run the function which save the row data into first result file
  */
-  PreProcessor: Array<(data: any, PushToResult: () => void, PushToLaggards: () => void, current_array_data: any[] ) => object | string | number | boolean>,
+  PreProcessor: Array<(data: any, PushToResult: Function, PushToLaggards: Function, current_array_data: any[] ) => object | string | number | boolean>,
 }
 
 declare module 'sql-csv-insert-processor' {

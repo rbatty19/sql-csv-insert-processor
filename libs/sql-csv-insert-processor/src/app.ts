@@ -90,22 +90,21 @@ function Proccessor(
         for (const func of PreProcessor) {
           data_sharing = func(
             data_sharing,
-            (() => PushToResult(`( ${row_data.join(',')} )`)),
-            (() => PushToLaggards(`( ${row_data.join(',')} )`)),
+            PushToResult,
+            PushToLaggards,
             current_array_data_result
           )
         }
 
       } else {
 
-        let data_sharing = row;
-        //       
-
+        let data_sharing = row;           
+        //
         for (const func of PreProcessor) {
           data_sharing = func(
             data_sharing,
-            (() => PushToResult(`,( ${row_data.join(',')} )`)),
-            (() => PushToLaggards(`,( ${row_data.join(',')} )`)),
+            PushToResult,
+            PushToLaggards,
             current_array_data_laggard
           )
         }
@@ -134,7 +133,7 @@ function Proccessor(
 
   function PushToResult(data) {
     current_array_data_result.push(data)
-    string_file += `${data}\n`;
+    string_file += `${`( ${data.join(',')} )`}\n`;
   }
 
   function PushToLaggards(data) {
