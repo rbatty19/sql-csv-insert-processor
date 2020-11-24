@@ -106,10 +106,10 @@ function Proccessor(_a) {
             });
             //
             if (!i) {
-                string_file += "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";
+                string_file_2 += "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";
             }
             else {
-                string_file += "," + ("( " + row_data.join(',') + " )") + "\n";
+                string_file_2 += "," + ("( " + row_data.join(',') + " )") + "\n";
             }
         });
         //

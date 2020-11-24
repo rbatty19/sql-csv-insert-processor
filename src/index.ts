@@ -18,8 +18,8 @@ const SETUP: ProcessorSetup[] = [
     laggards_file_name: 'exported/annotations/for_review_ann_box',
     fields: {
       attachment_url: 'image_url_address',
-      instructions: 'details', 
-      with_labels: 'with_labels'    
+      instructions: 'details',
+      with_labels: 'with_labels'
     },
     IS_INSERT_IGNORE: true,
     TABLE_NAME: 'ann_box',
@@ -29,14 +29,16 @@ const SETUP: ProcessorSetup[] = [
     ON_DUPLICATED: '',
     PreProcessor: [
       (data, callbackSaveResult, callbackSaveLaggards) => {
-     
+
         console.log(data);
 
         callbackSaveResult(data);
+        callbackSaveLaggards(data);
 
         return data;
       }
-    ]
+    ],
+    PostProcessor: []
   },
   // {
   //   result_file_name: 'results/prods_ampps/main_t_prod_ampps_result',
