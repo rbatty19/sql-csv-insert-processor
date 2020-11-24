@@ -25,7 +25,7 @@ var util_1 = require("./util");
  *
  */
 function Proccessor(_a) {
-    var laggards_file_name = _a.laggards_file_name, IS_INSERT_IGNORE = _a.IS_INSERT_IGNORE, csv_file_path = _a.csv_file_path, encoding = _a.encoding, fields = _a.fields, result_file_name = _a.result_file_name, TABLE_NAME = _a.TABLE_NAME, PreProcessor = _a.PreProcessor;
+    var laggards_file_name = _a.laggards_file_name, IS_INSERT_IGNORE = _a.IS_INSERT_IGNORE, csv_file_path = _a.csv_file_path, encoding = _a.encoding, fields = _a.fields, result_file_name = _a.result_file_name, TABLE_NAME = _a.TABLE_NAME, PreProcessor = _a.PreProcessor, PostProcessor = _a.PostProcessor;
     var string_file = '';
     var string_file_2 = '';
     ///
@@ -54,29 +54,27 @@ function Proccessor(_a) {
             });
             return obj;
         })();
-        // for first row and item
-        //
-        // columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
-        //   ',',
-        // )} )`
-        // //
-        // PushToLaggardsHeader('-');
-        //
-        // PushToResultHeader(columns_header);
-        //
         var data_sharing = row;
         //
         for (var _i = 0, PreProcessor_1 = PreProcessor; _i < PreProcessor_1.length; _i++) {
             var func = PreProcessor_1[_i];
             //
-            data_sharing = func(data_sharing, PushToResult, PushToLaggards, []);
+            data_sharing = func(data_sharing, PushToResult, PushToLaggards, current_array_data_result);
             //
             columns = Object.keys(data_sharing);
         }
     })
         .on('end', function () {
+        var final_data_sharing = current_array_data_result;
+        for (var _i = 0, PostProcessor_1 = PostProcessor; _i < PostProcessor_1.length; _i++) {
+            var func = PostProcessor_1[_i];
+            //
+            final_data_sharing = func(final_data_sharing);
+            //
+        }
         console.log(" " + TABLE_NAME + " | CSV file successfully processed");
         current_array_data_result.forEach(function (item, i) {
+            //
             row_data = Object.values(item).map(function (item) {
                 if (typeof item == 'string')
                     item = "\"" + item + "\"";
@@ -91,6 +89,12 @@ function Proccessor(_a) {
             }
         });
         current_array_data_laggard.forEach(function (item, i) {
+            //
+            row_data = Object.values(item).map(function (item) {
+                if (typeof item == 'string')
+                    item = "\"" + item + "\"";
+                return item;
+            });
             //
             if (!i) {
                 string_file += "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";

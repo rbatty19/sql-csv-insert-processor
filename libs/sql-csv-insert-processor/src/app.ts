@@ -83,15 +83,13 @@ function Proccessor(
 
     })
     .on('end', () => {
-
-      for (const func of PostProcessor) {
-        let data_sharing = current_array_data_result;       
+      let final_data_sharing = current_array_data_result;
+      for (const func of PostProcessor) {        
         //
-        data_sharing = func(
-          data_sharing
+        final_data_sharing = func(
+          final_data_sharing
         )
         //
-        columns = Object.keys(data_sharing)
       }
 
       console.log(` ${TABLE_NAME} | CSV file successfully processed`);

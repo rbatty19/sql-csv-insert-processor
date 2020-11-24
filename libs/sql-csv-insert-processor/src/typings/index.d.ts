@@ -27,7 +27,7 @@ interface ProcessorSetup {
  * @param PushToLaggards Run the function which save the row data into first result file
  */
   PreProcessor: Array<(data: any, PushToResult: Function, PushToLaggards: Function, current_array_data: any[]) => object | string | number | boolean>,
-  PostProcessor: Array<(final_array_data: any) => object | string | number | boolean>,
+  PostProcessor: Array<(final_array_data: any) => any[]>,
 
 }
 
