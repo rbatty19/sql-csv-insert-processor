@@ -6,3 +6,7 @@ export function isNumber(value) {
     return false;
   }
 }
+
+export function replaceAll(string, search, replace) {
+  return string.split(search).join(replace);
+}

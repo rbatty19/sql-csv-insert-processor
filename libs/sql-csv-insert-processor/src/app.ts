@@ -8,7 +8,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 import iconv from 'iconv-lite';
 import write from 'write';
-import { isNumber } from './util';
+import { replaceAll } from './util';
 
 /**
  *
@@ -38,6 +38,10 @@ function Proccessor(
 
   ///
   let columns_header, rows_list;
+  //
+  const current_array_data_result = [];
+  //
+  const current_array_data_laggard = [];
 
   fs.createReadStream(csv_file_path)
     .pipe(iconv.decodeStream(encoding))
@@ -74,34 +78,39 @@ function Proccessor(
         //
         columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
           ',',
-        )} )`//
+        )} )`
+        //
         PushToLaggardsHeader('-');
         //
         PushToResultHeader(columns_header);
         //
         let data_sharing = row;
         //
+
         for (const func of PreProcessor) {
           data_sharing = func(
             data_sharing,
             (() => PushToResult(`( ${row_data.join(',')} )`)),
-            (() => PushToLaggards(`( ${row_data.join(',')} )`))
+            (() => PushToLaggards(`( ${row_data.join(',')} )`)),
+            current_array_data_result
           )
         }
 
-      } else {       
+      } else {
 
         let data_sharing = row;
+        //       
 
         for (const func of PreProcessor) {
           data_sharing = func(
             data_sharing,
             (() => PushToResult(`,( ${row_data.join(',')} )`)),
-            (() => PushToLaggards(`,( ${row_data.join(',')} )`))
+            (() => PushToLaggards(`,( ${row_data.join(',')} )`)),
+            current_array_data_laggard
           )
         }
 
-       
+
       }
 
       /////////////////////////////////////
@@ -124,25 +133,24 @@ function Proccessor(
     });
 
   function PushToResult(data) {
+    current_array_data_result.push(data)
     string_file += `${data}\n`;
   }
 
   function PushToLaggards(data) {
+    current_array_data_laggard.push(data)
     string_file_2 += `${data}\n`;
   }
 
   function PushToResultHeader(data) {
+    current_array_data_result.push(data)
     string_file = `${data}\n`;
   }
 
   function PushToLaggardsHeader(data) {
+    current_array_data_laggard.push(data)
     string_file_2 = `${data}\n`;
   }
-
-  function replaceAll(string, search, replace) {
-    return string.split(search).join(replace);
-  }
-
 
 };
 
