@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isNumber = void 0;
+exports.replaceAll = exports.isNumber = void 0;
 function isNumber(value) {
     try {
         value = Number(value);
@@ -11,3 +11,7 @@ function isNumber(value) {
     }
 }
 exports.isNumber = isNumber;
+function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+}
+exports.replaceAll = replaceAll;
