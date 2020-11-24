@@ -32,7 +32,7 @@ const SETUP: ProcessorSetup[] = [
      
         console.log(data);
 
-        callbackSaveResult();
+        callbackSaveResult(data);
 
         return data;
       }

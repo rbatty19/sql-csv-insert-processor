@@ -31,23 +31,7 @@ const SETUP: ProcessorSetup[] = [
      * @param {requestCallback} PushToLaggards Run the function which save the row data into first result file
      */
       (data, callbackSaveResult, callbackSaveLaggards) => {
-        // if (TABLE_NAME == '') {
-        //   if (!isNumber(row.ampp_id)) {
-        //     //
-        //     PushToLaggards(`,( ${row_data.join(',')} )`);
-        //   } else {
-        //     PushToResult(`,( ${row_data.join(',')} )`);
-        //   }
-        // }
-        // if (TABLE_NAME == 't_producto_ampp') {
-        //   if (!isNumber(row.ampp_id) || !isNumber(row.t_producto_id)) {
-        //     //
-        //     PushToLaggards(`,( ${row_data.join(',')} )`);
-        //   } else {
-        //     PushToResult(`,( ${row_data.join(',')} )`);
-        //   }
-        // }
-
+        
         console.log(data);
 
         callbackSaveResult();

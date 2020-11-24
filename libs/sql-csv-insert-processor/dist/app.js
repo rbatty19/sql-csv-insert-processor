@@ -29,7 +29,7 @@ function Proccessor(_a) {
     var string_file = '';
     var string_file_2 = '';
     ///
-    var columns_header, rows_list;
+    var columns_header, rows_list, columns = [], row_data;
     //
     var current_array_data_result = [];
     //
@@ -41,6 +41,7 @@ function Proccessor(_a) {
         //
         var row = (function () {
             var obj = {};
+            //
             Object.keys(row_).forEach(function (row_raw) {
                 Object.keys(fields).forEach(function (row_exact) {
                     var _a;
@@ -53,43 +54,52 @@ function Proccessor(_a) {
             });
             return obj;
         })();
-        var columns = Object.keys(row);
-        var row_data = Object.values(row);
-        row_data = row_data.map(function (item) {
-            // if (isNumber(item)) item = Number(item);
-            if (typeof item == 'string')
-                item = "\"" + item + "\"";
-            return item;
-        });
         // for first row and item
-        if (!columns_header) {
+        //
+        // columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
+        //   ',',
+        // )} )`
+        // //
+        // PushToLaggardsHeader('-');
+        //
+        // PushToResultHeader(columns_header);
+        //
+        var data_sharing = row;
+        //
+        for (var _i = 0, PreProcessor_1 = PreProcessor; _i < PreProcessor_1.length; _i++) {
+            var func = PreProcessor_1[_i];
             //
-            columns_header = "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";
+            data_sharing = func(data_sharing, PushToResult, PushToLaggards, []);
             //
-            PushToLaggardsHeader('-');
-            //
-            PushToResultHeader(columns_header);
-            //
-            var data_sharing = row;
-            //
-            for (var _i = 0, PreProcessor_1 = PreProcessor; _i < PreProcessor_1.length; _i++) {
-                var func = PreProcessor_1[_i];
-                data_sharing = func(data_sharing, PushToResult, PushToLaggards, current_array_data_result);
-            }
+            columns = Object.keys(data_sharing);
         }
-        else {
-            var data_sharing = row;
-            //
-            for (var _a = 0, PreProcessor_2 = PreProcessor; _a < PreProcessor_2.length; _a++) {
-                var func = PreProcessor_2[_a];
-                data_sharing = func(data_sharing, PushToResult, PushToLaggards, current_array_data_laggard);
-            }
-        }
-        /////////////////////////////////////
-        // console.log({ columns, row_data });
     })
         .on('end', function () {
         console.log(" " + TABLE_NAME + " | CSV file successfully processed");
+        current_array_data_result.forEach(function (item, i) {
+            row_data = Object.values(item).map(function (item) {
+                if (typeof item == 'string')
+                    item = "\"" + item + "\"";
+                return item;
+            });
+            //
+            if (!i) {
+                string_file += "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";
+            }
+            else {
+                string_file += "," + ("( " + row_data.join(',') + " )") + "\n";
+            }
+        });
+        current_array_data_laggard.forEach(function (item, i) {
+            //
+            if (!i) {
+                string_file += "INSERT INTO " + TABLE_NAME + " (" + columns.join(',') + ") VALUES ( " + row_data.join(',') + " )";
+            }
+            else {
+                string_file += "," + ("( " + row_data.join(',') + " )") + "\n";
+            }
+        });
+        //
         if (IS_INSERT_IGNORE)
             string_file = util_1.replaceAll(string_file, 'INSERT', 'INSERT IGNORE');
         // Main
@@ -102,19 +112,9 @@ function Proccessor(_a) {
     });
     function PushToResult(data) {
         current_array_data_result.push(data);
-        string_file += "( " + data.join(',') + " )" + "\n";
     }
     function PushToLaggards(data) {
         current_array_data_laggard.push(data);
-        string_file_2 += data + "\n";
-    }
-    function PushToResultHeader(data) {
-        current_array_data_result.push(data);
-        string_file = data + "\n";
-    }
-    function PushToLaggardsHeader(data) {
-        current_array_data_laggard.push(data);
-        string_file_2 = data + "\n";
     }
 }
 exports.Proccessor = Proccessor;

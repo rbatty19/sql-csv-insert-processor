@@ -37,7 +37,7 @@ function Proccessor(
   let string_file_2 = '';
 
   ///
-  let columns_header, rows_list;
+  let columns_header, rows_list, columns = [], row_data;
   //
   const current_array_data_result = [];
   //
@@ -51,6 +51,7 @@ function Proccessor(
       const row: any = (() => {
         let obj = {};
 
+        //
         Object.keys(row_).forEach((row_raw) => {
           Object.keys(fields).forEach((row_exact) => {
             //
@@ -64,61 +65,67 @@ function Proccessor(
         return obj;
       })();
 
-      const columns = Object.keys(row);
-      let row_data = Object.values(row);
-
-      row_data = row_data.map((item) => {
-        // if (isNumber(item)) item = Number(item);
-        if (typeof item == 'string') item = `\"${item}\"`;
-        return item;
-      });
 
       // for first row and item
-      if (!columns_header) {
-        //
-        columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
-          ',',
-        )} )`
-        //
-        PushToLaggardsHeader('-');
-        //
-        PushToResultHeader(columns_header);
-        //
-        let data_sharing = row;
-        //
 
-        for (const func of PreProcessor) {
-          data_sharing = func(
-            data_sharing,
-            PushToResult,
-            PushToLaggards,
-            current_array_data_result
-          )
-        }
-
-      } else {
-
-        let data_sharing = row;           
-        //
-        for (const func of PreProcessor) {
-          data_sharing = func(
-            data_sharing,
-            PushToResult,
-            PushToLaggards,
-            current_array_data_laggard
-          )
-        }
+      //
+      // columns_header = `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(
+      //   ',',
+      // )} )`
+      // //
+      // PushToLaggardsHeader('-');
+      //
+      // PushToResultHeader(columns_header);
+      //
+      let data_sharing = row;
+      //
 
 
+      for (const func of PreProcessor) {
+        //
+        data_sharing = func(
+          data_sharing,
+          PushToResult,
+          PushToLaggards,
+          []
+        )
+        //
+        columns = Object.keys(data_sharing)
       }
 
-      /////////////////////////////////////
-
-      // console.log({ columns, row_data });
     })
     .on('end', () => {
+
       console.log(` ${TABLE_NAME} | CSV file successfully processed`);
 
+      current_array_data_result.forEach((item, i) => {
+        //
+        row_data = Object.values(item).map((item) => {
+          if (typeof item == 'string') item = `\"${item}\"`;
+          return item;
+        });
+        //
+        if (!i) {
+          string_file += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
+        } else {
+          string_file += `,${`( ${row_data.join(',')} )`}\n`;
+        }
+      })
+      current_array_data_laggard.forEach((item, i) => {
+        //
+        row_data = Object.values(item).map((item) => {
+          if (typeof item == 'string') item = `\"${item}\"`;
+          return item;
+        });
+        //
+        if (!i) {
+          string_file += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
+        } else {
+          string_file += `,${`( ${row_data.join(',')} )`}\n`;
+        }
+      })
+
+      //
       if (IS_INSERT_IGNORE) string_file = replaceAll(string_file, 'INSERT', 'INSERT IGNORE');
 
       // Main
@@ -133,22 +140,10 @@ function Proccessor(
 
   function PushToResult(data) {
     current_array_data_result.push(data)
-    string_file += `${`( ${data.join(',')} )`}\n`;
   }
 
   function PushToLaggards(data) {
     current_array_data_laggard.push(data)
-    string_file_2 += `${data}\n`;
-  }
-
-  function PushToResultHeader(data) {
-    current_array_data_result.push(data)
-    string_file = `${data}\n`;
-  }
-
-  function PushToLaggardsHeader(data) {
-    current_array_data_laggard.push(data)
-    string_file_2 = `${data}\n`;
   }
 
 };
