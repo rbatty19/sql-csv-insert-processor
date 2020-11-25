@@ -28,8 +28,7 @@ jobs:
         with:
           node-version: 12.x
           registry-url: 'https://registry.npmjs.org/'
-      -  run: npm ci
-      -  run: npm run build
+      -  run: npm ci   
       # ----------------------------------------------------     
       - name: Compare npm with local (versions)
         uses: Rober19/compare-npm-versions-ci@master
@@ -49,7 +48,7 @@ jobs:
          echo "Package will not be deployed due to version number must increase"
       # ----------------------------------------------------
       - name: Build
-        # if: steps.package_version.outputs.npm_is_greater == 'false'
+        if: steps.package_version.outputs.npm_is_greater == 'false'
         run: |
          npm run build
       # ----------------------------------------------------
