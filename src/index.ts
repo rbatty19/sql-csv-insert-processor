@@ -28,32 +28,47 @@ const SETUP: ProcessorSetup[] = [
     encoding: 'win1250',
     ON_DUPLICATED: '',
     PreProcessor: [
-      (data, callbackSaveResult, callbackSaveLaggards) => {
+      /**
+       * @param {*} data represents current row data
+       * @param {requestCallback} PushToResult Run the function which save the row data into first result file
+       * @param {requestCallback} PushToLaggards Run the function which save the row data into first result file
+       * @param {[]} currentResultArray Includes the curretly saved data (for results) to be passed to PostProcessor
+       * @param {[]} currentLaggardArray Includes the curretly saved data (for laggards) to be passed to PostProcessor
+       */
+      (
+        data,
+        callbackSaveResult,
+        callbackSaveLaggards,
+        currentResultArray,
+        currentLaggardArray
+      ) => {
 
         console.log(data);
 
         callbackSaveResult(data);
         callbackSaveLaggards(data);
 
+        /* 
+        if (currentResultArray.includes( ... )) {
+          ...
+         } 
+         */
+
         return data;
       }
     ],
-    PostProcessor: []
+    PostProcessor: [
+      (
+        arrayResult,
+        arrayLaggards
+      ) => {
+
+        // YOU CAN CHECK OR EDIT THEM BEFORE BUILDIND FILES
+
+        return [arrayResult, arrayLaggards];
+      }
+    ]
   },
-  // {
-  //   result_file_name: 'results/prods_ampps/main_t_prod_ampps_result',
-  //   laggards_file_name: 'results/prods_ampps/for_review_t_prod_ampps_result',
-  //   fields: {
-  //     AMPP_Id: 'ampp_id',
-  //     ID_PRODUCTO: 't_producto_id',
-  //   },
-  //   IS_INSERT_IGNORE: false,
-  //   TABLE_NAME: 't_producto_ampp',
-  //   csv_file_path:
-  //   './src/assets/Trainingset.ai - box annotation example - demo.csv',
-  //   encoding: 'win1250',
-  //   ON_DUPLICATED: ''
-  // },
 ];
 
 /**

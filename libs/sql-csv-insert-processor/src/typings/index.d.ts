@@ -1,6 +1,5 @@
 
 
-
 /**
  * 
  */
@@ -19,14 +18,14 @@ interface ProcessorSetup {
   // >< ---------      SQL     ------------------
   TABLE_NAME: string,
   IS_INSERT_IGNORE: boolean,
-  ON_DUPLICATED: string,
+  ON_DUPLICATED?: string,
 
   /**
  * @param data represents current row data
  * @param {requestCallback} PushToResult Run the function which save the row data into first result file
  * @param PushToLaggards Run the function which save the row data into first result file
  */
-  PreProcessor: Array<(data: any, PushToResult: Function, PushToLaggards: Function, current_array_data: any[]) => object | string | number | boolean>,
+  PreProcessor: Array<(data: any, PushToResult: Function, PushToLaggards: Function, current_array_data: any[], current_array_data_laggard: any[]) => object | string | number | boolean>,
   PostProcessor: Array<(final_array_data: any[], final_array_data_laggard: any[]) => [final_array_data: any[], final_array_data_laggard: any[]]>,
 
 }

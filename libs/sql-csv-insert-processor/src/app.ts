@@ -31,15 +31,15 @@ function Proccessor(
     fields,
     result_file_name,
     TABLE_NAME,
+    ON_DUPLICATED,
     PreProcessor,
     PostProcessor
   }: ProcessorSetup
 ): void {
-  let string_file = '';
-  let string_file_2 = '';
-
+  let result_string_final_file = '';
+  let laggards_string_final_file = '';
   ///
-  let columns_header, rows_list, columns = [], row_data;
+  let columns = [], row_data;
   //
   let current_array_data_result = [];
   //
@@ -75,7 +75,8 @@ function Proccessor(
           data_sharing,
           PushToResult,
           PushToLaggards,
-          current_array_data_result
+          current_array_data_result,
+          current_array_data_laggard
         )
         //
         columns = Object.keys(data_sharing)
@@ -83,7 +84,6 @@ function Proccessor(
 
     })
     .on('end', () => {
-      let recycle = {}
       let final_data_sharing = current_array_data_result;
       let final_data_sharing_laggards = current_array_data_laggard;
       for (const func of PostProcessor) {
@@ -93,7 +93,7 @@ function Proccessor(
           final_data_sharing_laggards
         )
         final_data_sharing = ress;
-        final_data_sharing_laggards = laggs        
+        final_data_sharing_laggards = laggs
       }
       //
       current_array_data_result = final_data_sharing
@@ -111,9 +111,9 @@ function Proccessor(
         });
         //
         if (!i) {
-          string_file += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
+          result_string_final_file += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
         } else {
-          string_file += `,${`( ${row_data.join(',')} )`}\n`;
+          result_string_final_file += `,${`( ${row_data.join(',')} )`}\n`;
         }
       })
       current_array_data_laggard.forEach((item, i) => {
@@ -124,30 +124,35 @@ function Proccessor(
         });
         //
         if (!i) {
-          string_file_2 += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
+          laggards_string_final_file += `INSERT INTO ${TABLE_NAME} (${columns.join(',')}) VALUES ( ${row_data.join(',')} )`
         } else {
-          string_file_2 += `,${`( ${row_data.join(',')} )`}\n`;
+          laggards_string_final_file += `,${`( ${row_data.join(',')} )`}\n`;
         }
       })
 
       //
-      if (IS_INSERT_IGNORE) string_file = replaceAll(string_file, 'INSERT', 'INSERT IGNORE');
+      if (IS_INSERT_IGNORE) result_string_final_file = replaceAll(result_string_final_file, 'INSERT', 'INSERT IGNORE');
+
+      if (ON_DUPLICATED) {
+        result_string_final_file += `\n ${ON_DUPLICATED}`
+        laggards_string_final_file += `\n ${ON_DUPLICATED}`
+      }
 
       // Main
-      write.sync(`${result_file_name}.sql`, string_file, { overwrite: true });
+      write.sync(`${result_file_name}.sql`, result_string_final_file, { overwrite: true });
 
       // laggards
-      write.sync(`${laggards_file_name}.sql`, string_file_2, { overwrite: true });
+      write.sync(`${laggards_file_name}.sql`, laggards_string_final_file, { overwrite: true });
     })
     .on('error', (e) => {
       console.log('Error', e);
     });
 
-  function PushToResult(data) {
+  function PushToResult(data: any) {
     current_array_data_result.push(data)
   }
 
-  function PushToLaggards(data) {
+  function PushToLaggards(data: any) {
     current_array_data_laggard.push(data)
   }
 
