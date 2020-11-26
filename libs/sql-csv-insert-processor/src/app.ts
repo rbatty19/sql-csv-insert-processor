@@ -49,10 +49,12 @@ function Proccessor(
     .pipe(iconv.decodeStream(encoding))
     .pipe(csv())
     .on('data', (row_) => {
-      //
+
+       //
       const row: any = (() => {
         let obj = {};
 
+        if (!fields) return row_ ;
         //
         Object.keys(row_).forEach((row_raw) => {
           Object.keys(fields).forEach((row_exact) => {
@@ -63,6 +65,7 @@ function Proccessor(
               });
           });
         });
+
 
         return obj;
       })();
