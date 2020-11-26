@@ -6,8 +6,6 @@
 > npm i sql-csv-insert-processor
 ```
 
-
-
 # Testing sql-csv-insert-processor
 
 ```ts
@@ -18,27 +16,44 @@ const SETUP: ProcessorSetup[] = [
     fields: {
       attachment_url: 'image_url_address',
       instructions: 'details',
-      with_labels: 'with_labels'
+      with_labels: 'with_labels',
     },
     IS_INSERT_IGNORE: true,
     TABLE_NAME: 'ann_box',
-    csv_file_path:
-      './src/assets/Trainingset.ai - box annotation example - demo.csv',
+    csv_file_path: './src/assets/Trainingset.ai - box annotation example - demo.csv',
     encoding: 'win1250',
-    ON_DUPLICATED: '',
     PreProcessor: [
-      (data, saveResult, saveLaggards) => {
+      /**
+       * @param {*} data represents current row data
+       * @param {requestCallback} PushToResult Run the function which save the row data into first result file
+       * @param {requestCallback} PushToLaggards Run the function which save the row data into first result file
+       * @param {[]} currentResultArray Includes the curretly saved data (for results) to be passed to PostProcessor
+       * @param {[]} currentLaggardArray Includes the curretly saved data (for laggards) to be passed to PostProcessor
+       */
+      (data, callbackSaveResult, callbackSaveLaggards, currentResultArray, currentLaggardArray) => {
+        console.log(data);
 
-        console.log(data)
+        callbackSaveResult(data);
+        callbackSaveLaggards(data);
 
-        saveResult();
+        /* 
+        if (currentResultArray.includes( ... )) {
+          ...
+         } 
+         */
 
         return data;
-      }
-    ]
+      },
+    ],
+    PostProcessor: [   
+      (arrayResult, arrayLaggards) => {
+        // YOU CAN CHECK OR EDIT THEM BEFORE BUILDIND FILES
+
+        return [arrayResult, arrayLaggards];
+      },
+    ],    
   },
-...
-]
+];
 ```
 
 convert
@@ -48,8 +63,9 @@ convert
 into this
 
 ```sql
-INSERT IGNORE INTO ann_box (details,image_url_address,with_labels) VALUES ( "Draw a box around each car","https://i.imgur.com/OUyDzS2.jpg","TRUE" )
+INSERT IGNORE INTO ann_box (details,image_url_address,with_labels) VALUES
 ( "Draw a box around each car","https://i.imgur.com/OUyDzS2.jpg","TRUE" )
+,( "Draw a box around each car","https://i.imgur.com/OUyDzS2.jpg","TRUE" )
 ,( "Draw a box around each device 2","https://i.imgur.com/ZhgjlpU.jpg","TRUE" )
 ,( "Draw a box around each device 3","https://i.imgur.com/ZhgjlpU.jpg","TRUE" )
 ,( "Draw a box around each device 4","https://i.imgur.com/ZhgjlpU.jpg","TRUE" )
