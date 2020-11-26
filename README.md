@@ -8,4 +8,4 @@
 
 Go to [publication npm](https://www.npmjs.com/package/sql-csv-insert-processor)
 
-![image-20201126104349744](assets/image-20201126104349744.png)
+![image-20201126104349744](.github/assets/image-20201126104349744.png)
