@@ -1,6 +1,6 @@
 {
   "name": "sql-csv-insert-processor",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "",
   "main": "dist/app.js",
   "types": "src/typings/index.d.ts",
@@ -10,6 +10,11 @@
     "ts:dev": "nodemon --exec ts-node -- ./server.ts",
     "ts:dev2": "nodemon src/index.ts --exec ts-node --project ./tsconfig.json",
     "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rober19/sql-csv-insert-processor",
+    "directory": "libs/sql-csv-insert-processor"
   },
   "author": "Roberto Batty | Rober19",
   "license": "MIT",

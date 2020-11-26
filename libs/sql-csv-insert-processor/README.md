@@ -60,7 +60,7 @@ const SETUP: ProcessorSetup[] = [
 
 convert
 
-![image-20201121002652998](.npm/assets/image-20201121002652998.png)
+![image](https://raw.githubusercontent.com/Rober19/sql-csv-insert-processor/npm-publish/libs/sql-csv-insert-processor/.npm/assets/image-20201121002652998.png)
 
 into this
 
